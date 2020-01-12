@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script type="text/javascript">
+    //   var book = {
+    //     "title": 'Hello World',
+    //     "authors": ['Tom', 'Alice'],
+    //     edition: 3,
+    //     year: 2010
+    //   }
+    //   //    JSON.stringify()除了要序列化的js对象之外，还可以接收两个参数(用于指定以不同方式序列化的js)
+    //   //    1.第一个参数是过滤器(可为数组或函数)
+    //   //    2.第二个参数是一个选项(表示是否在JSON字符串中保留缩进)，注意:第二个数组中的两个字段要与JSON中的属性对应
+    //   var jsonText = JSON.stringify(book, ["title", "edition"])
+    //   console.log(jsonText)//{"title":"Hello World","edition":3}
+
+        // var book = {
+        //     "title":'Hello World',
+        //     "authors": ['Tom', 'Alice'],
+        //     edition: 3,
+        //     year: 2010,
+        //     price:20
+        // }
+        // // 如果第二个参数是函数(传入的函数接收两个属性，属性(键)名和属性值)
+        // var jsonText = JSON.stringify(book,function(key,value){
+        //     switch(key){
+        //         case "authors":
+        //             return value.join(',');
+        //         case 'year':
+        //         return 500;
+        //         case 'edtion':
+        //         return undefined;
+        //         default:
+        //         return value;
+        //     }
+        // })
+        // console.log(jsonText);
+        // {"title":"Hello World","authors":"Tom,Alice","edition":3,"year":500,"price":20}
+        // 可以看到如果键为”编辑”，通过返回未定义删除该属性。一定要提供默认项，使其他值可以显示在结果中
+
+        // 字符串的缩进
+        //    var book = {
+        //     "title": 'Hello World',
+        //     "authors": ['Tom', 'Alice'],
+        //     edition: 3,
+        //     year: 2010
+        //    }
+        //    var jsonText = JSON.stringify(book,null,4)
+
+        //    console.log(book)
+        //    console.log(jsonText)
+
+        // 有时候JSON.stringify（）不能满足自动序列化的需求。这时就可以给对象定义的toJSON（）方法
+        //     var book = {
+        //         "title": 'Hello World',
+        //         "authors": ['Tom', 'Alice'],
+        //         edition: 3,
+        //         year: 2010,
+        //         price:20,
+        //         toJSON:function(){
+        //             return this.title;
+        //         }
+        //    }
+        //    var jsonText = JSON.stringify(book);
+        //    console.log(jsonText);
+
+            var book = {
+                "title": "Hello World",
+                "authors": ["Tom", "Alice"],
+                edition: 3,
+                year: 2010,
+                price:20,
+                releaseDate:new Date(2011,11,1)
+           }
+           var jsonText = JSON.stringify(book)
+
+           var bookCopy = JSON.parse(jsonText,function(key,value){
+               if(key == "releaseDate") {
+                   return new Date(value);
+               }else{
+                   return value
+               }
+           })
+           console.log("bookCopy",bookCopy.releaseDate.getFullYear());//bookCopy 2011
+           console.log("jsonText",jsonText.releaseDate.getFullYear());//报错
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 引入高德地图API -->
+</head>
+
+<body>
+    <!-- 创建地图容器 -->
+    <div id="container"></div>
+</body>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.8&key=9a54a8e6b303d3b415a8affdadfadd48"></script>
+<script>
+    window.onload = function () {
+        var map = new AMap.Map('container');
+        // 如果在地图初始化时不配置中心点，和缩放级别，这个时候地图上面默认是你所处的位置，缩放级别也是默认的
+        // PC端默认是IP定位，如果IP定位无法使用则会自动切换到浏览器定位
+        // 移动端默认是浏览器定位，如果浏览器定位无法使用则会自动切换到IP定位
+
+        // map.setZoom(10); //setzoom 指定缩放级别
+        // map.setCenter([116.39, 39.9]); //指定地图中心
+
+        // 定位到当前位置
+        //根据浏览器定位，已经获取到当前位置信息
+        map.setCenter(this._position);
+        //如果同时需要缩放到指定缩放级别
+        map.setZoomAndCenter(13, this._position);
+
+        // //引入单个插件
+        // AMap.plugin('AMap.ToolBar', function () { //异步加载插件
+        //     var toolbar = new AMap.ToolBar();
+        //     map.addControl(toolbar);
+        // });
+
+        //对于地图的自定义，属性有很多，只列举三个
+        // var map = new AMap.Map('container', {
+        //     zoom: 11, //缩放级别
+        //     // center: [116.397428, 39.90923], //地图显示中心点坐标，如果没有center属性，则会定位到你当前所处的位置
+        //     viewMode: '3D' //使用3D视图
+        // });
+
+        //实时路况图层
+        var trafficLayer = new AMap.TileLayer.Traffic({
+            zIndex: 10
+        });
+        map.add(trafficLayer); //添加图层到地图
+
+        //引入多个插件
+        AMap.plugin(['AMap.ToolBar', 'AMap.Driving'], function () { //异步同时加载多个插件
+            var toolbar = new AMap.ToolBar();
+            map.addControl(toolbar);
+            var driving = new AMap.Driving(); //驾车路线规划
+            driving.search([116.39, 39.9])
+        });
+
+        // IP定位获取当前城市信息
+        AMap.plugin('AMap.CitySearch', function () {
+            var citySearch = new AMap.CitySearch()
+            citySearch.getLocalCity(function (status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    // 查询成功，result即为当前所在城市信息
+                    console.log(result)
+                    alert('当前城市:' + result.province + result.city)
+                }
+            })
+        })
+
+        // 添加覆盖物
+        var marker = new AMap.Marker({ //添加自定义点标记
+            map: map,
+            position: [this._position], //基点位置
+            offset: new AMap.Pixel(-17, -42), //相对于基点的偏移位置
+            draggable: true, //是否可拖动
+            content: '<div class="marker-route marker-marker-bus-from"></div>' //自定义点标记覆盖物内容
+        });
+
+        //可以使用css对content里面的dom元素设置样式
+
+
+        // 获取定位信息（需要使用插件）
+        // 浏览器定位
+        // ???
+        //导航需要一个起点和终点 ???
+        // var driving = new AMap.Driving({
+        //     map: map,
+        //     panel: "panel"
+        // });
+        // // 根据起终点经纬度规划驾车导航路线
+        // driving.search(new AMap.LngLat(116.379028, 39.865042), new AMap.LngLat(116.427281, 39.903719));
+
+        
+
+    }
+</script>
+<!-- 设置宽和高 -->
+<style>
+    #container {
+        width: 800px;
+        height: 480px;
+    }
+</style>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        // What you have
+        var officers = [
+            { id: 1, name: 'andy', age: 15, weight: 60 },
+            { id: 2, name: 'sam', age: 20, weight: 50 },
+            { id: 3, name: 'julia', age: 15, weight: 40 },
+            { id: 4, name: 'tom', age: 25, weight: 30 }
+        ]
+        // What you need
+
+        var officersIds = [];
+        officers.forEach(val => {
+            console.log(val)
+            for (let key in val) {
+                console.log(key)
+                console.log(val[key])
+            }
+        })
+        
+        // console.log(officersIds)
+
+        // map
+        // const officersIds = officers.map(val=>val.id)
+        // console.log(officersIds)//[1,2,3,4]
+
+        // filter
+    //     const teenager = officers.filter(officers => officers.age < 18)
+    //     console.log(teenager)
+    //     // {id: 1, name: "andy", age: 15, weight: 60}
+    //    // {id: 3, name: "julia", age: 15, weight: 40}
+
+    //     const adult = officers.filter(officers => officers.age > 18)
+    //     console.log(adult) 
+    //     // {id: 2, name: "sam", age: 20, weight: 50}
+    //     // {id: 4, name: "tom", age: 25, weight: 30}
+
+    //     // reduce  可以直观的返回数组里面指定的一个值或者对象
+    //     // 所有职员的体重
+    //     const totalWeight = officers.reduce((param1,param2) => param1+param2.weight,0)
+    //     console.log(totalWeight) //180
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
