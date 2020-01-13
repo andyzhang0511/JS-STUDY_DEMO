@@ -505,6 +505,72 @@
 
     // 2.9 Promise.all
     // 简写串联所有你所需要的的Promise执行
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
+
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
+
+    // Promise.all([setDelay(1000), setDelaySecond(1)]).then(result => {
+    //     console.log(result)
+    // })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // 输出结果
+    // ["我延迟了1000毫秒后输出的,是第一个函数", "我延迟了1秒后输出的，是第二个函数"]
+    // 输出的是一个数组，相当于把all方法里面的Promise并行执行，注意是并行
+    // 相当于两个Promise同时开始执行,同时返回,并不是先执行第一个再执行第二个
+
+    // 2.10 Promise实战
+
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
+
+    // arr = [setDelay(1000), setDelay(1000), setDelay(1000)]
+    // arr[0]
+    //     .then(result => {
+    //         console.log(result)
+    //         return arr[1]
+    //     })
+    //     .then(result => {
+    //         console.log(result)
+    //         return arr[2]
+    //     })
+    //     .then(result => {
+    //         console.log(result)
+    //     })
+
+    // 输出结果:（并行输出，也就是同时输出）
+    // 我延迟了1000毫秒后输出的,是第一个函数
+    // 我延迟了1000毫秒后输出的,是第一个函数
+    // 我延迟了1000毫秒后输出的,是第一个函数
+
+    // 如果想改成串行输出，比如说一前以后间隔1秒输出，可以采用直接函数名存储函数的方式(不执行Promise)来达到目的
     const setDelay = (millisecond) => {
         return new Promise((resolve, reject) => {
             if (typeof millisecond != 'number') {
@@ -515,28 +581,20 @@
             }, millisecond)
         })
     }
-
-    const setDelaySecond = (seconds) => {
-        return new Promise((resolve, reject) => {
-            if (typeof seconds != 'number' || seconds > 10) {
-                reject(new Error('参数必须是number类型，并且小于等于10'))
-            }
-            setTimeout(() => {
-                resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
-            }, seconds * 1000)
-        })
-    }
-
-    Promise.all([setDelay(1000), setDelaySecond(1)]).then(result => {
+    arr = [setDelay, setDelay, setDelay]
+    arr[0](1000).then(result => {
         console.log(result)
+        return arr[1](1000)
     })
-        .catch(err => {
-            console.log(err)
+        .then(result => {
+            console.log(result)
+            return arr[2](1000)
         })
-    // 输出结果
-    // ["我延迟了1000毫秒后输出的,是第一个函数", "我延迟了1秒后输出的，是第二个函数"]
-    // 输出的是一个数组，相当于把all方法里面的Promise并行执行，注意是并行
-    // 相当于两个Promise同时开始执行,同时返回,并不是先执行第一个再执行第二个
+        .then(result => {
+            console.log(result)
+        })
+    // 上述相当于把Promise预先存储在一个数组中，在你需要调用的时候再去执行
+
 </script>
 
 <body>
