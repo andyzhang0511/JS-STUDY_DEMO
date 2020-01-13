@@ -44,7 +44,7 @@
     // const setDelay = (millisecond) => {
     //     return new Promise((resolve, reject) => {
     //         if (typeof millisecond != 'number' || millisecond > 10) {
-    //             reject(new Error('参数必须是number类型'))
+    //             reject(new Error('参数必须是number类型或者是number但是大于10'))
     //         }
     //         setTimeout(() => {
     //             resolve(`我延迟了${millisecond}毫秒后输出的`)
@@ -121,7 +121,7 @@
     //     console.log(result)
     //     return setDelayThree(50)
     // }).then((result) => {
-    //     console.log('我进行到第三步的')
+    //     console.log('我进行到第三步的') 
     //     console.log(result)
     // }).catch((err) => {
     //     console.log(err)
@@ -148,6 +148,27 @@
     // 2.5 链式写法需要注意的地方
     // then式链式写法的本质其实是一直往下传递返回一个新的Promise，
     // 也就是说then在下一步接收的是上一步返回的Promise，理解这个对于后面的细节非常重要！！
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
+
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
 
     // setDelay(2000).then((result) => {
     //     console.log('我进行到第一步的')
@@ -166,6 +187,9 @@
     //     .catch((err) => {
     //         console.log(err)
     //     })
+    //     .then((res) => {
+    //         console.log('链式中的catch并不是终点,catch完如果还有then还会继续往下走！！')
+    //     })
 
     // 输出结果
     // 我进行到第一步的
@@ -174,6 +198,28 @@
     // 我还是继续执行的!!!!
 
     // 我们把catch挪上去，写到then错误处理前
+
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
+
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
 
     // setDelay(2000).then((result) => {
     //     console.log('我进行到第一步的')
@@ -187,7 +233,7 @@
     //         console.log('我进行到第二步的')
     //         console.log(result)
     //     }, (_err) => {
-    //         console.log('我出错啦，进到这里捕获错误，但是不经过catch了')
+    //         console.log('我出错啦，但是由于catch在我前面，所以错误早就被捕获了，我这没有错误了')
     //     })
     //     .then((result) => {
     //         console.log('我还是继续执行的!!!!')
@@ -201,7 +247,7 @@
     // undefined
     // 我还是继续执行的!!!!
 
-    // 可以看到先经过catch的捕获，后面就没错误了。
+    // 可以看到先经过catch的捕获，后面就没错误了
 
     // 可以得出需要注意的:
     // catch写法是针对整个链式写法的错误捕获的，而then第二个参数是针对于上一个返回Promise的
@@ -212,42 +258,46 @@
     // 实际写的时候，参数捕获的方式基本写的少，catch的写法会用到更多
     // 链式中任何一个环节出问题，都会被catch到，同时在某个环节后面的代码就不会执行了
 
-    const setDelay = (millisecond) => {
-        return new Promise((resolve, reject) => {
-            if (typeof millisecond != 'number' || millisecond > 10) {
-                reject(new Error('参数必须是number类型'))
-            }
-            setTimeout(() => {
-                resolve(`我延迟了${millisecond}毫秒后输出的`)
-            }, millisecond)
-        })
-    }
-    const setDelaySecond = (seconds) => {
-        return new Promise((resolve, reject) => {
-            if (typeof seconds != 'number' || seconds > 10) {
-                reject(new Error('参数必须是number类型，并且小于等于10'))
-            }
-            setTimeout(() => {
-                console.log(`先是setDelaySeconds函数输出，延迟了${seconds}秒，一共需要延迟${seconds + 2}秒`)
-                resolve(setDelay(2000))
-            }, seconds * 1000)
-        })
-    }
-    setDelay('2000').then((result) => {
-        console.log('第一步完成了')
-        console.log(result)
-        return setDelaySecond(3)
-    })
-        .catch((err) => {
-            console.log(err)//这里移到第一个链式去，发现上面的不执行了，下面的继续执行
-        })
-        .then((result) => {
-            console.log('第二步完成了')
-            console.log(result)
-        })
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
 
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
 
-    // Promise链式中间想返回自定义的值
+    // setDelay('2000').then((result) => {
+    //     console.log('第一步完成了')
+    //     console.log(result)
+    //     return setDelaySecond(3)
+    // })
+    //     .catch((err) => {
+    //         console.log(err)//这里移到第一个链式去，发现上面的不执行了，下面的继续执行
+    //     })
+    //     .then((result) => {
+    //         console.log('第二步完成了')
+    //         console.log(result)
+    //     })
+
+    // Error: 参数必须是number类型
+    // 第二步完成了
+    // undefined
+
+    // 2.7 Promise链式中间想返回自定义的值
     // 很简单，用promise的原型方法resolve即可
 
     // const setDelay = (millisecond) => {
@@ -283,14 +333,14 @@
     // 第三步完成了
     // 这里可以继续返回
 
-    //如何跳出或停止Promise链式(重难点 还没研究透)
+    // 2.8 如何跳出或停止Promise链式(重难点 还没研究透)
     // const setDelay = (millisecond) => {
     //     return new Promise((resolve, reject) => {
     //         if (typeof millisecond != 'number') {
     //             reject(new Error('参数必须是number类型'))
     //         }
     //         setTimeout(() => {
-    //             resolve(`我延迟了${millisecond}毫秒后输出的`)
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
     //         }, millisecond)
     //     })
     // }
@@ -301,8 +351,7 @@
     //             reject(new Error('参数必须是number类型，并且小于等于10'))
     //         }
     //         setTimeout(() => {
-    //             console.log(`先是setDelaySeconds函数输出，延迟了${seconds}秒，一共需要延迟${seconds + 2}秒`)
-    //             resolve(setDelay(2000))
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
     //         }, seconds * 1000)
     //     })
     // }
@@ -318,15 +367,176 @@
     //     return Promise.reject('跳出循环的信息')//这里返回一个reject，主动跳出循环了
     // }).then((result) => {
     //     console.log('我不执行')
-    // }).catch((mes)=>{
+    // }).catch((mes) => {
     //     console.dir(mes)
     //     console.log('我跳出了')
     // })
 
+    // 输出结果
+    // 我延迟了2000毫秒后输出的,是第一个函数
+    // 我进行到第一步的
+    // 我进行到第二步的
+    // 我延迟了1秒后输出的，是第二个函数
+    // 我主动跳出循环了
+    // 跳出循环的信息
+    // 我跳出了
 
+    // 有时候我们有这个需求,catch是放在中间(不是末尾)，而同时我们又不想执行catch后面的代码,
+    // 也就是链式的绝对中止，应该怎么办?
 
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
 
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
 
+    // setDelay(2000).then((result) => {
+    //     console.log(result)
+    //     console.log('我进行到第一步的');
+    //     return setDelaySecond(1)
+    // })
+    //     .then((result) => {
+    //         console.log('我进行到第二步的')
+    //         console.log(result)
+    //         console.log('我主动跳出循环了')
+    //         return Promise.reject('跳出循环的信息') //这里直接调用Promise原型方法返回一个reject,主动跳出循环了
+    //     })
+    //     .then((result) => {
+    //         console.log('我不执行')
+    //     })
+    //     .catch((mes) => {
+    //         console.dir(mes)
+    //         console.log('我跳出了')
+    //     })
+    //     .then((then) => {
+    //         console.log('我不想执行，但是却执行了')//问题在这,上述的终止方法治标不治本
+    //     })
+
+    // 输出结果
+    // 我延迟了2000毫秒后输出的,是第一个函数
+    // 我进行到第一步的
+    // 我进行到第二步的
+    // 我延迟了1秒后输出的，是第二个函数
+    // 我主动跳出循环了
+    // 跳出循环的信息
+    // 我跳出了
+    // 我不想执行，但是却执行了
+
+    // Promise其实是有三种状态的,pending,resolve,reject
+    // pending:请求中的状态，其实它就是个中间过渡状态
+    // resolve:成功
+    // reject:失败
+
+    // 也就是说原Promise对象与新对象状态保持一致，在此再次申明:then的下一层其实得到的是上一层级返回的Promise对象
+
+    // const setDelay = (millisecond) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof millisecond != 'number') {
+    //             reject(new Error('参数必须是number类型'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+    //         }, millisecond)
+    //     })
+    // }
+
+    // const setDelaySecond = (seconds) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (typeof seconds != 'number' || seconds > 10) {
+    //             reject(new Error('参数必须是number类型，并且小于等于10'))
+    //         }
+    //         setTimeout(() => {
+    //             resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+    //         }, seconds * 1000)
+    //     })
+    // }
+
+    // setDelay(2000).then((result) => {
+    //     console.log(result)
+    //     console.log('我进行到第一步的');
+    //     return setDelaySecond(1)
+    // })
+    //     .then((result) => {
+    //         console.log('我进行到第二步的')
+    //         console.log(result)
+    //         console.log('我主动跳出循环了')
+    //         // return Promise.reject('跳出循环的信息') //这里直接调用Promise原型方法返回一个reject,主动跳出循环了
+    //         // 重点在这 
+    //         // 这里返回的一个新的Promise，没有resolve和reject，那么会一直处于pending状态
+    //         // 因为没有返回，那么这种状态就一直保持着，中断了这个Promise
+    //         return new Promise(() => { console.log('后续的不会执行') })
+    //     })
+    //     .then((result) => {
+    //         console.log('我不执行')
+    //     })
+    //     .catch((mes) => {
+    //         console.dir(mes)
+    //         console.log('我跳出了')
+    //     })
+    //     .then((then) => {
+    //         console.log('我也不会执行')
+    //     })
+
+    // 输出结果
+    // 我延迟了2000毫秒后输出的,是第一个函数
+    // 我进行到第一步的
+    // 我进行到第二步的
+    // 我延迟了1秒后输出的，是第二个函数
+    // 我主动跳出循环了
+    // 后续的不会执行
+
+    // 这样就解决了上述，错误跳出而导致无法完全终止Promise链的问题
+
+    // 2.9 Promise.all
+    // 简写串联所有你所需要的的Promise执行
+    const setDelay = (millisecond) => {
+        return new Promise((resolve, reject) => {
+            if (typeof millisecond != 'number') {
+                reject(new Error('参数必须是number类型'))
+            }
+            setTimeout(() => {
+                resolve(`我延迟了${millisecond}毫秒后输出的,是第一个函数`)
+            }, millisecond)
+        })
+    }
+
+    const setDelaySecond = (seconds) => {
+        return new Promise((resolve, reject) => {
+            if (typeof seconds != 'number' || seconds > 10) {
+                reject(new Error('参数必须是number类型，并且小于等于10'))
+            }
+            setTimeout(() => {
+                resolve(`我延迟了${seconds}秒后输出的，是第二个函数`)
+            }, seconds * 1000)
+        })
+    }
+
+    Promise.all([setDelay(1000), setDelaySecond(1)]).then(result => {
+        console.log(result)
+    })
+        .catch(err => {
+            console.log(err)
+        })
+    // 输出结果
+    // ["我延迟了1000毫秒后输出的,是第一个函数", "我延迟了1秒后输出的，是第二个函数"]
+    // 输出的是一个数组，相当于把all方法里面的Promise并行执行，注意是并行
+    // 相当于两个Promise同时开始执行,同时返回,并不是先执行第一个再执行第二个
 </script>
 
 <body>
