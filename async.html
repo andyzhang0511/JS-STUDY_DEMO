@@ -7,54 +7,225 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script>
+        // 为什么要有async/await存在?是因为要解决大量复杂不易读的Promise异步问题
         // async声明的函数的返回本质上是一个Promise
         // 只要声明了这个函数是async，那么内部不管你怎么处理，它的返回肯定是个Promise
-        // async function process() {
-
-        // }
-        const a = (async function () {
-            return '我是Promise'
-        })()
+        // const a = (async function () {
+        //     return '我是Promise'
+        // })()
         // console.log(a)
-        // 返回是Promise
-        // Promise {<resolved>: "我是Promise"}
+        // // 返回的是一个Promise
+        // // Promise {<resolved>: "我是Promise"}
 
-        // 等同于:
-        const b = (async function () {
-            return Promise.resolve('我是Promise')
-        })()
+        // // 等同于:
+        // const b = (async function () {
+        //     return Promise.resolve('我是Promise')
+        // })()
         // console.log(b)
 
-        const demo = (async function () {
-            return Promise.resolve('我是Promise')
-            // 等同于 
-            //return '我是Promise'
-            // 等同于
-            // return new Promise((resolve, reject) => {
-            //     resolve('我是Promise')
-            // })
-        })()
-        demo.then(result => {
-            // console.log(result) //这里拿到返回值
-        })
+        // const demo = (async function () {
+        //     return Promise.resolve('我是Promise')
+        //     // 等同于 
+        //     //return '我是Promise'
+        //     // 等同于
+        //     // return new Promise((resolve, reject) => {
+        //     //     resolve('我是Promise')
+        //     // })
+        // })()
+        // demo.then(result => {
+        //     console.log(result) //这里拿到返回值
+        // })
 
-        // await的本质是可以提供等同于'同步效果'的等待异步返回能力的语法糖
-        // 用await声明的Promise异步返回，必须“等待”到有返回值的时候，代码才继续执行下去
-        // 请记住await是在等待一个Promise的异步返回
-        const demo1 = (async () => {
-            let result = await new Promise((resolve, reject) => {
+        // // await的本质是可以提供等同于'同步效果'的等待异步返回能力的语法糖
+        // // 用await声明的Promise异步返回，必须“等待”到有返回值的时候，代码才继续执行下去
+        // // 请记住await是在等待一个Promise的异步返回
+        // const demo1 = (async () => {
+        //     let result = await new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve('我延迟了一秒')
+        //         }, 1000)
+        //     })
+        //     console.log('我由于上面的程序还没执行完，先不执行，等待一会')
+        //     return result
+        // })()
+        // // demo1的返回当做Promise
+        // demo1.then(result => {
+        //     console.log('输出', result)
+        // })
+
+        // 输出结果
+        // 我由于上面的程序还没执行完，先不执行，等待一会
+        // 输出 我延迟了一秒
+
+        // 这里需要注意一点:then的执行总是最后的
+
+
+        // 推荐的写法是带上then,更规范
+        // 当然没有返回也是没问题的，demo会照常执行，以下写法是不带返回值的写法
+        // const demo2 = async () => {
+        //     let result2 = await new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve('我延迟了一秒')
+        //         }, 1000)
+        //     })
+        //     console.log('我由于上面的程序还没执行完，先不执行，等待一会')
+        // }
+        // demo2()
+        // 输出结果
+        // 我由于上面的程序还没执行完，先不执行，等待一会
+
+        // 重点！！请记住，await是在等待一个Promise的异步返回
+
+        // await也可以用于声明一般情况下的传值
+        // const demo3 = (async () => {
+        //     let message = '我是声明值'
+        //     let result = await message
+        //     console.log(result)
+        //     console.log('我由于上面的程序还没执行完，先不执行，等待一会')
+        //     return result
+        // })()
+        // demo3.then(resulttt => {
+        //     console.log('输出', resulttt)
+        // })
+
+        // 输出结果
+        // 我是声明值
+        // 我由于上面的程序还没执行完，先不执行，等待一会
+        // 输出 我是声明值
+
+        // 这里需要注意一点:then的执行总是最后的
+
+        // 3.4 async/await优势实战
+        const setDelay = (millisecond) => {
+            return new Promise((resolve, reject) => {
+                if (typeof millisecond != 'number') {
+                    reject(new Error('参数必须是number类型'))
+                }
                 setTimeout(() => {
-                    resolve('我延迟了一秒')
-                }, 1000)
+                    resolve(`我延迟了${millisecond}毫秒后输出的`)
+                }, millisecond)
             })
-            console.log('我由于上面的程序还没执行完，先不执行，等待一会')
-            return result
+        }
+
+        const setDelaySecond = (seconds) => {
+            return new Promise((resolve, reject) => {
+                if (typeof seconds != 'number' || seconds > 10) {
+                    reject(new Error('参数必须是number类型，并且小于等于10'))
+                }
+                setTimeout(() => {
+                    resolve(`我延迟了${seconds}秒后输出的，注意单位是秒`)
+                }, seconds * 1000)
+            })
+        }
+        // 以上是两个延时函数，现在想实现的需求是:先延时1秒，再延迟2秒，再延时1秒，最后输出'完成'
+        // 这个过程如果用then的写法，大概如下:
+        // setDelay(1000).then(result => {
+        //     console.log(result)
+        //     return setDelaySecond(2)
+        // }).then(result => {
+        //     console.log(result)
+        //     return setDelay(1000)
+        // }).then(result => {
+        //     console.log(result)
+        //     console.log('完成')
+        // }).catch(err => {
+        //     console.log(err)
+        // })
+
+        // 可以看出，用.then写法太繁琐，现在我们来试试async/await
+        // (async () => {
+        //     const result1 = await setDelay(1000)
+        //     console.log(result1)
+        //     const result2 = await setDelaySecond(2)
+        //     console.log(result2)
+        //     const result3 = await setDelay(1000)
+        //     console.log(result3)
+        //     console.log('完成了')
+        // })()
+
+        // 输出结果
+        // 我延迟了1000毫秒后输出的
+        // 我延迟了2秒后输出的，注意单位是秒
+        // 我延迟了1000毫秒后输出的
+        // 完成了
+
+        // 3.5 async/await错误处理
+        // 因为async函数返回的是一个promise，所以我们可以在外面catch住错误
+
+        // const demo4 = (async () => {
+        //     const result1 = await setDelay(1000)
+        //     console.log(result1)
+        //     const result2 = await setDelaySecond(2)
+        //     console.log(result2)
+        //     const result3 = await setDelay(1000)
+        //     console.log(result3)
+        //     console.log('完成了')
+        // })()
+
+        // demo4.catch(err => {
+        //     console.log(err)
+        // })
+
+        // 输出结果
+        // 我延迟了1000毫秒后输出的
+        // 我延迟了2秒后输出的，注意单位是秒
+        // 我延迟了1000毫秒后输出的
+        // 完成了
+
+        // 在async函数的catch中捕获错误，当做一个Promise处理。也可以用try...catch语句，就不用在外面cacth了
+
+        // (async () => {
+        //     try {
+        //         const result1 = await setDelay(1000)
+        //         console.log(result1)
+        //         const result2 = await setDelaySecond(2)
+        //         console.log(result2)
+        //         const result3 = await setDelay(1000)
+        //         console.log(result3)
+        //         console.log('完成了')
+        //     } catch (e) {
+        //         console.log(e)//这里捕获错误
+        //     }
+        // })()
+
+        // 输出结果
+        // 我延迟了1000毫秒后输出的
+        // 我延迟了2秒后输出的，注意单位是秒
+        // 我延迟了1000毫秒后输出的
+        // 完成了
+
+        // 3.6 async/await的中断（终止程序）
+        let count = 6
+        const demo5 = (async () => {
+            const result = await setDelay(1000)
+            console.log(result)
+            const result1 = await setDelaySecond(count)
+            console.log(result1)
+            if (count > 5) {
+                return '我退出了，下面的不进行了'
+                // return 
+                // return false //这些写法都可以
+                // return null
+            }
+            console.log(await setDelay(1000))
+            console.log('完成了')
         })()
-        // demo1的返回当做Promise
-        demo1.then(result => {
-            console.log('输出', result) // 输出 我延迟了一秒
+        demo5.then(result => {
+            console.log(result)
         })
-        // demo1()
+            .catch(err => {
+                console.log(err)
+            })
+        
+        // 输出结果:
+        // 我延迟了1000毫秒后输出的
+        // 我延迟了6秒后输出的，注意单位是秒
+        // 我退出了，下面的不进行了
+
+        // 实际就是直接return反悔了一个Promise,相当于return Promise.resolve('我退出了，下面的不进行了')
+        // 也可以返回一个‘拒绝’:return Promise.reject(new Error('拒绝'))
+
+        // 总结:async函数实质就是返回一个Promise!!!
     </script>
 </head>
 
