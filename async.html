@@ -195,28 +195,28 @@
         // 完成了
 
         // 3.6 async/await的中断（终止程序）
-        let count = 6
-        const demo5 = (async () => {
-            const result = await setDelay(1000)
-            console.log(result)
-            const result1 = await setDelaySecond(count)
-            console.log(result1)
-            if (count > 5) {
-                return '我退出了，下面的不进行了'
-                // return 
-                // return false //这些写法都可以
-                // return null
-            }
-            console.log(await setDelay(1000))
-            console.log('完成了')
-        })()
-        demo5.then(result => {
-            console.log(result)
-        })
-            .catch(err => {
-                console.log(err)
-            })
-        
+        // let count = 6
+        // const demo5 = (async () => {
+        //     const result = await setDelay(1000)
+        //     console.log(result)
+        //     const result1 = await setDelaySecond(count)
+        //     console.log(result1)
+        //     if (count > 5) {
+        //         return '我退出了，下面的不进行了'
+        //         // return 
+        //         // return false //这些写法都可以
+        //         // return null
+        //     }
+        //     console.log(await setDelay(1000))
+        //     console.log('完成了')
+        // })()
+        // demo5.then(result => {
+        //     console.log(result)
+        // })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
+
         // 输出结果:
         // 我延迟了1000毫秒后输出的
         // 我延迟了6秒后输出的，注意单位是秒
@@ -226,6 +226,104 @@
         // 也可以返回一个‘拒绝’:return Promise.reject(new Error('拒绝'))
 
         // 总结:async函数实质就是返回一个Promise!!!
+
+        // ------------------------学习笔记二-------------------------------
+        // 1.1 基础概念
+        // async 用来表示函数是异步的，定义的函数会返回一个promise对象，可以使用then方法添加回调函数
+        // async function demo01() {
+        //     return 123
+        // }
+        // demo01().then(val => {
+        //     console.log(val)//123
+        // })
+        // 若async定义的函数有返回值,return 123;相当于Promise.resolve(123),没有声明式的return则相当于执行了Promise.resolve(123)
+
+        // function sleep(second) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve('enough sleep')
+        //         }, second)
+        //     })
+        // }
+        // function normalFunc() {
+        //     console.log('normalFunc')
+        // }
+        // async function awaitDemo() {
+        //     await normalFunc()
+        //     console.log('something,~~')
+        //     let result = await sleep(2000)
+        //     console.log(result)// 两秒之后会被打印出来
+        // }
+        // awaitDemo()
+
+        // 输出结果
+        // normalFunc
+        // something,~~
+        // enough sleep
+
+        // await后面可以跟任何的js表达式,虽然说await可以等很多类型的东西，但是它最主要的意图是用来等待Promise对象的状态被resolved
+        // 如果await的是promise对象会造成异步函数停止执行并且等待promise的解决,如果等的是正常的表达式则立即执行
+
+        // 1.2 实例说明
+        // function sleep2(second, param) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve(param)
+        //         }, second)
+        //     })
+        // }
+        // async function test() {
+        //     let result1 = await sleep2(2000, 'req01')
+        //     let result2 = await sleep2(1000, 'req02' + result1)
+        //     let result3 = await sleep2(500, 'req03' + result2)
+        //     console.log(result1)
+        //     console.log(result2)
+        //     console.log(result3)
+        // }
+        // test()
+        // 打印结果
+        // req01
+        // req02req01
+        // req03req02req01
+
+        // 1.3 错误处理
+        // 上述的代码给的都是resolve的情况，那么reject的时候该如何处理?
+        // function sleep3(second) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             reject('want to sleep')
+        //         }, second)
+        //     })
+        // }
+        // async function errorDemoSuper() {
+        //     try {
+        //         let result = await sleep3(3000)
+        //         console.log(result)
+        //     } catch (err) {
+        //         console.log(err)
+        //     }
+        // }
+        // errorDemoSuper() // want to sleep
+        // 有了 try catch 之后我们就能够拿到 Promise.reject 回来的数据了
+
+        // 1.4 小心你的并行处理（重要！！！可用在echart多个表格同时异步请求）
+        // 我有三个异步请求需要发送，相互没有关联，只是需要当请求都结束后将界面的loading清除掉即可
+        function sleep4(second) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('request done! ' + Math.random());
+                }, second);
+            })
+        }
+
+        async function correctDemo() {
+            let p1 = sleep4(1000);
+            let p2 = sleep4(1000);
+            let p3 = sleep4(1000);
+            await Promise.all([p1, p2, p3]);
+            console.log('clear the loading~');
+        }
+        correctDemo();// clear the loading~
     </script>
 </head>
 
