@@ -120,12 +120,12 @@
                 }, second);
             })
         }
-        //错误的写法.
+        //错误的写法(其实是个穿行的写法)
         // async function bugDemo() {
         //     await bingxing(1000)
         //     await bingxing(1000)
         //     await bingxing(1000)
-        //     console.log('clear the loading ~')
+        //     console.log('clear the loading ~') // 执行时间大概2秒多
         // }
         // bugDemo()
         //正确的写法
@@ -134,7 +134,7 @@
             let p2 = bingxing(1000)
             let p3 = bingxing(1000)
             await Promise.all([p1, p2, p3])
-            console.log('clear the loading ~')
+            console.log('clear the loading ~') // 执行时间大概1秒左右  效率更高
         }
         correctDemo()
     </script>
