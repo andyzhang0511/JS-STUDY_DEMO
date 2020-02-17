@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        // async function basicDemo() {
+        //     let result = await Math.random()
+        //     console.log(result)
+        // }
+        // basicDemo()
+        // async用来表示函数是异步的，定义的函数会返回一个Promise对象，可以使用then方法添加回调函数
+        /***************************************华丽的分割线*************************************************/
+        // async
+        // async function demo1() {
+        //     return 123
+        // }
+        // demo1().then(val => {
+        //     console.log(val)
+        // })
+        // 若 async 定义的函数有返回值，return 123;相当于Promise.resolve(123),
+        // 没有声明式的 return则相当于执行了Promise.resolve();
+
+        // await
+        // await可以理解为是async await的简写。await必须出现在async的内部，不能单独使用
+        // function notAsyncFunc() {
+        //     await Math.random()
+        // }
+        // notAsyncFunc()//Uncaught SyntaxError: await is only valid in async function
+        /***************************************华丽的分割线*************************************************/
+        // 最主要的意图是用来等待 Promise 对象的状态被 resolved。
+        // 如果await的是 promise对象会造成异步函数停止执行并且等待 promise 的解决,
+        // 如果等的是正常的表达式则立即执行。
+        // function sleepOne(second) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve('睡觉111')
+        //         }, second);
+        //     })
+        // }
+        // function sleepTwo(second) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve('睡觉222')
+        //         }, second);
+        //     })
+        // }
+        // function nomalFunc() {
+        //     console.log('嘿嘿嘿')
+        // }
+        // async function test() {
+        //     await nomalFunc()
+        //     console.log(111)
+        //     let result1 = await sleepOne(2000)// 两秒之后会被打印出来
+        //     console.log(result1)
+        //     let result2 = await sleepTwo(3000)// 三秒之后会被打印出来
+        //     console.log(result2)
+        // }
+        // test()
+        //嘿嘿嘿
+        //111
+        //睡觉111
+        //睡觉222
+        /***************************************华丽的分割线*************************************************/
+        //实例
+        // 你有三个请求需要发生，第三个请求是依赖于第二个请求的解构，第二个请求依赖于第一个请求的结果。
+        // 若用 ES5实现会有3层的回调，若用Promise 实现至少需要3个then。
+        // 一个是代码横向发展，另一个是纵向发展。今天指给出 async-await 的实现哈~
+        //我们仍然使用 setTimeout 来模拟异步请求
+        // function sleepThree(second, param) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve(param)
+        //         }, second);
+        //     })
+        // }
+        // async function testDemo() {
+        //     let res1 = await sleepThree(1000, 'res111')
+        //     let res2 = await sleepThree(2000, 'res222' + res1)
+        //     let res3 = await sleepThree(3000, 'res333' + res2)
+        //     console.log(`
+        //     ${res3}
+        //     ${res2}
+        //     ${res1}
+        //     `)
+        // }
+        // testDemo()
+        /***************************************华丽的分割线*************************************************/
+        // function errorDemo(second) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             reject('error')
+        //         }, second);
+        //     })
+        // }
+        // // async function test() {
+        // //     let result = await errorDemo(2000)
+        // //     console.log(result)
+        // // }
+        // // test() // 报错
+        // async function errorHandle() {
+        //     try {
+        //         let result = await errorDemo(2000)
+        //         console.log(result)
+        //     } catch (err) {
+        //         console.log(err)
+        //     }
+        // }
+        // errorHandle()
+        /***************************************华丽的分割线*************************************************/
+        // 并行请求案例
+        // 三个异步请求需要发送，相互没有关联，只是需要当请求都结束后将界面的 loading 清除掉即可
+        function bingxing(second) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('request done !' + Math.random())
+                }, second);
+            })
+        }
+        //错误的写法
+        // async function bugDemo() {
+        //     await bingxing(1000)
+        //     await bingxing(1000)
+        //     await bingxing(1000)
+        //     console.log('clear the loading ~')
+        // }
+        // bugDemo()
+        //正确的写法
+        async function correctDemo() {
+            let p1 = bingxing(1000)
+            let p2 = bingxing(1000)
+            let p3 = bingxing(1000)
+            await Promise.all([p1, p2, p3])
+            console.log('clear the loading ~')
+        }
+        correctDemo()
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

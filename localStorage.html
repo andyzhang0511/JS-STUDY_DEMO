@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        // 存储数据setItem
+        // if (!window.localStorage) {
+        //     alert('浏览器版本太低，不支持localStorage!')
+        // } else {
+        //     window.localStorage.setItem('a', 1)//存储名为a值为1的变量
+        //     window.localStorage.setItem('b', 2)
+        // }
+        // // 读取数据getItem
+
+        // // let b = window.localStorage.getItem('a') //读取保存在storage对象里名为a的变量值
+        // let b = window.localStorage.valueOf() //读取保存在storage对象上的全部数据
+
+        // console.log(b)
+
+        let students = {
+            andy: {
+                name: 'zhangfan',
+                age: 18
+            },
+            jack: {
+                name: 'jack',
+                age: 20
+            }
+        }
+        let student = JSON.stringify(students)
+        console.log(student)
+        localStorage.setItem('a',student)
+
+        let newStudents = localStorage.getItem('a')
+        let b = JSON.parse(newStudents)
+        console.log(b)
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

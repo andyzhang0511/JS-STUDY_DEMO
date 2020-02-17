@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // 三.常用api说明
+        // 为给定ID的user创建请求
+        // 1、get请求axios.get(url[, config])
+        axios.get('/user?ID=12345').then(response => {
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
+        })
+        // 可选的，上面的请求可以这样做
+        axios.get('/user', { params: { ID: 12345 } }).then(response => {
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        // 总结:axios对象调用get方法，.then()成功回调，.catch()失败回调
+        // get方法也可以把url中的参数提出来单独放在一个对象中
+
+        // 2.post请求axios.post(url[,data[,config]])
+        axios.post('/user', {
+            firstName: 'zhang',
+            lastName: 'fan'
+        }).then(response => {
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        // 3.通用请求axios(config),通过向axios传递相关配置config对象来创建请求
+        axios({
+            methods: 'post',
+            url: 'http://jsonplaceholder.typicode.com/users',
+            data: {
+                nama: 'zhangfan'
+            }
+        }).then(response => {
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        // 4.执行多个并发请求
+        function getUserAccount() {
+            return axios.get('/user/12345') //请求1
+        }
+
+        function getUserPermissions() {
+            return axios.get('/user/12345/permission') //请求2
+        }
+
+        axios.all([getUserAccount(), getUserPermissions()])//两个请求放到数组中传递给all()
+            .then(axios.spread((account, Permission) => {//多个请求都发送完毕，拿到返回的数据
+                //两个请求现在都执行完毕
+            }))
+
+        // axios中的all方法，传入一个数组，数组元素即为函数调用，函数中即为请求调用
+        // 然后,then()回调方法中调用axios自己的spread方法
+
+        // 四.创建实例
+        // 可以使用自定义配置新建一个axios实例axios.creat([config])
+        // creat创建一个新的实例对象
+        const instance = axios.creat({
+            url: 'http://jsonplaceholder.typicode.com/users',
+            timeout: 3000,
+            method: 'post'
+        })
+        //即可调用方法,和axios实例相同
+        instance.get('http://jsonplaceholder.typicode.com/users').then(response => {
+            console.log(response)
+        })
+
+        // 添加请求拦截器
+        axios.interceptors.request.use(function (config) {
+            // 在发送请求之前做些什么
+            return config;
+        }, function (error) {
+            // 对请求错误做些什么
+            return Promise.reject(error);
+        });
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

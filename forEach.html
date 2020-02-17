@@ -8,28 +8,35 @@
     <title>Document</title>
     <script>
         // What you have
-        var officers = [
-            { id: 1, name: 'andy', age: 15, weight: 60 },
-            { id: 2, name: 'sam', age: 20, weight: 50 },
-            { id: 3, name: 'julia', age: 15, weight: 40 },
-            { id: 4, name: 'tom', age: 25, weight: 30 }
-        ]
+        // var officers = [
+        //     { id: 1, name: 'andy', age: 15, weight: 60 },
+        //     { id: 2, name: 'sam', age: 20, weight: 50 },
+        //     { id: 3, name: 'julia', age: 15, weight: 40 },
+        //     { id: 4, name: 'tom', age: 25, weight: 30 }
+        // ]
         // What you need
 
-        var officersIds = [];
-        officers.forEach(val => {
-            console.log(val)
-            for (let key in val) {
-                console.log(key)
-                console.log(val[key])
-            }
-        })
-        
+        // var officersIds = [];
+        // officers.forEach(val => {
+        //     // console.log(val.id)
+        //     // for (let key in val) {
+        //     //     // console.log(key)
+        //     //     // console.log(val[key])
+        //     // }
+        //     officersIds.push(val.id)
+        // })
         // console.log(officersIds)
 
         // map
-        // const officersIds = officers.map(val=>val.id)
-        // console.log(officersIds)//[1,2,3,4]
+        const officersIds = officers.map(val=>val.id)
+        console.log(officersIds)//[1,2,3,4]
+
+        // map另外一个作用，通过指定函数处理数组的每个元素，并返回处理后的数组
+        // var arr = [4,9,16,25]
+        // function myFunction() {
+        //     console.log(arr.map(Math.sqrt))//[2, 3, 4, 5]
+        // }
+        // myFunction()
 
         // filter
     //     const teenager = officers.filter(officers => officers.age < 18)
