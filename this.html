@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        //  1.普通函数:谁调用指向谁
+        //  2.对象函数调用:哪个函数调用，this就指向哪里
+        //  3.构造函数中调用
+        //  4.箭头函数中调用
+
+
+        // 记住最核心的一句话:哪个对象调用函数，函数里面的 this 指向哪个对象
+
+        // 1、普通函数：谁调用指向谁
+        var a = 123
+        function test1() {
+            console.log(this.a)
+        }
+        test1() // 123
+        // 上述例子中是全局对象window调用，所以函数里面的this指向window对象
+
+        // 有一点需要注意，let和const 声明的全局变量，不是指向 window 对象
+        let b = 123
+        function test2() {
+            console.log(this.b)
+        }
+        test2() // undefined
+
+        const c = 123
+        function test3() {
+            console.log(this.c)
+        }
+        test3() // undefined
+
+        // 2、对象函数调用
+        // 哪个函数调用，this 指向哪里
+        window.b = 2222
+        let obj = {
+            a: 111,
+            fn: function () {
+                alert(this.a) //111
+                alert(this.b) //undefined
+            }
+        }
+        obj.fn()
+        // 分析:根据定理,哪个对象调用函数,函数里的this就指向哪个函数
+        // 那么,上述中的例子是obj这个对象在调用函数,所以函数fn里的this就指向obj
+        // 然后,obj里面有a没有b
+
+        // 3.构造函数中调用
+        // JS里的普通函数可以使用new操作符来创建一个对象,此时该函数就是一个构造函数
+        function A() {
+            this.a = 1
+            this.func = () => {
+                return this
+            }
+        }
+        let objjj = new A()
+        console.log(objjj.a) // 1
+        console.log(objjj.func() === objjj) // true
+        console.log(objjj.func()) // a: 1  func: () => { return this }
+
+        // 4.箭头函数中调用
+        
+
+    </script>
+</body>
+
+</html>

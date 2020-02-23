@@ -88,28 +88,31 @@
         //     `)
         // }
         // testDemo()
+        // res333res222res111
+        // res222res111
+        // res111
         /***************************************华丽的分割线*************************************************/
-        // function errorDemo(second) {
-        //     return new Promise((resolve, reject) => {
-        //         setTimeout(() => {
-        //             reject('error')
-        //         }, second);
-        //     })
+        function errorDemo(second) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    reject('error')
+                }, second);
+            })
+        }
+        // async function test() {
+        //     let result = await errorDemo(2000)
+        //     console.log(result)
         // }
-        // // async function test() {
-        // //     let result = await errorDemo(2000)
-        // //     console.log(result)
-        // // }
-        // // test() // 报错
-        // async function errorHandle() {
-        //     try {
-        //         let result = await errorDemo(2000)
-        //         console.log(result)
-        //     } catch (err) {
-        //         console.log(err)
-        //     }
-        // }
-        // errorHandle()
+        // test() // 报错
+        async function errorHandle() {
+            try {
+                let result = await errorDemo(2000)
+                console.log(result)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        errorHandle()
         /***************************************华丽的分割线*************************************************/
         // 并行请求案例
         // 三个异步请求需要发送，相互没有关联，只是需要当请求都结束后将界面的 loading 清除掉即可
@@ -128,7 +131,7 @@
         //     console.log('clear the loading ~') // 执行时间大概2秒多
         // }
         // bugDemo()
-        //正确的写法
+        // 正确的写法
         async function correctDemo() {
             let p1 = bingxing(1000)
             let p2 = bingxing(1000)
@@ -137,6 +140,17 @@
             console.log('clear the loading ~') // 执行时间大概1秒左右  效率更高
         }
         correctDemo()
+
+        // console.log(1);//同步
+        // console.log(2);//同步
+        // setTimeout(function () {
+        //     console.log(3)
+        // }, 3000);//异步
+        // console.log(4);//同步
+        // console.log(5)//同步
+        // // 1 2 4 5 3
+
+
     </script>
 </head>
 

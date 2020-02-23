@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // 应用例子
+        // 创建正则表达式对象
+        var reg = new RegExp(/\d{5}/)
+        // 字符串
+        var str = 'myNumber10086'
+        var flag = reg.test(str)
+        console.log(flag)//true
+
+        // 创建正则表达式对象
+        var reg1 = new RegExp(/\d{5}/)
+        var flag1 = reg1.test('myNumber1006')
+        console.log(flag1) //false
+
+        // 方法
+        var str1="中国移动:10086,中国联通:10010,中国电信:10000";
+        // 把里面所有的数字全部显示出来
+        var arr = str1.match(/\d{5}/g)
+        console.log(arr) // ["10086", "10010", "10000"]
+
+        var reg2 = new RegExp(/[h]/gi)
+        var str2 = 'hHppHh'
+        str2 = str2.replace(reg2,'S')
+        console.log(str2) // SSppSS
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
