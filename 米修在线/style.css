@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    /* color: #fff; */
+}
+#time {
+    font-size: 10rem;
+    font-weight: bold;
+}
+h1{
+    margin-bottom: 3rem;
+    font-size: 3rem;
+}
+h2{
+    margin-bottom: 0.5rem;
+}
+span,
+h2:focus {
+    outline: none;
+}
+#id {
+    border-bottom: 1px solid #fff;
+}
+/* 媒体查询，当页面小于一定的值的时候，改变元素大小 */
+/* 当页面宽度小于700px的时候，time时间文字变成6rem */
+@media (max-width:700px){
+    #time{
+        font-size: 6rem;
+    }
+    h1{
+        font-size: 2rem;
+    }
+}
