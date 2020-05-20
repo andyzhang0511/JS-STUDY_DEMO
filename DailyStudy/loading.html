@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        (function () {
+            var lastScrollTop = 0;
+            var timer = null;
+            document
+                .getElementById('cnt')
+                .addEventListener('scroll', function (e) {
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+
+                    var target = e.currentTarget;
+                    var listCnt = document.getElementsByClassName('listCnt')[0];
+                    var loadMore = document.getElementById('loadMore');
+                    var curScrollTop = target.scrollTop;
+                    var scrollDown = curScrollTop - lastScrollTop > 0;
+                    var scrollUp = !scrollDown;
+                    var targetHeight = target.offsetHeight;
+                    var listCntHeight = listCnt.offsetHeight;
+
+                    var isEnd = curScrollTop + targetHeight === listCntHeight;
+                    var isTop = curScrollTop === 0;
+
+                    if (isTop) {
+                        //想要性能好点，可以加个定时器，不要每次滚到头部都刷新
+                        return loadMore.style.display = 'block';
+                    }
+
+                    if (isEnd) {
+                        //停留时间请根据实际情况调整
+                        timer = setTimeout(function () {
+                            //loadMoreFn
+                            console.info('loadMore')
+                        }, 2000)
+                    }
+                    loadMore.style.display = 'none';
+                });
+        })();
+
+    </script>
+</head>
+
+<body>
+    <div id="cnt" class="cnt">
+        <div class="listCnt">
+            <ul>
+                <li id="loadMore" class="eachList">点击刷新</li>
+                <li class="eachList"></li> //列表*n
+                ……
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

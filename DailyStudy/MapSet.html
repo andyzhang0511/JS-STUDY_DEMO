@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var m = new Map()
+        var s = new Set()
+        console.log('你的浏览器支持Map和Set')
+
+        var names = ['Michael', 'Bob', 'Tracy']
+        var scores = [95, 75, 85]
+        var result = names.indexOf('Bob')
+        console.log(result)
+
+        var m = new Map([['Michael',95],['Bob',75],['Tracy',85]])
+        var result1 = m.get('Michael')
+        console.log(result1) // 95
+
+        var test = [1,2,3,4,54,65,6,76,1,2,3,5,6,4,3,32]
+        console.log(test)
+        var result2 = new Set(test)
+        console.log(result2)
+        var result3 =result2.add(100)
+        console.log(result3)
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // const a = {
+        //     name: 'zhangfan',
+        //     age: 18,
+        //     sex: 'boy',
+        //     school: 'MIT'
+        // }
+        // const { name, sex } = a
+        // console.log({ name, sex }) // {name: "zhangfan", sex: "boy"}
+
+        var ws = new WebSocket('ws://192.168.0.130:2345')
+        // var ws = new WebSocket("wss://echo.websocket.org")
+        // 执行上面语句之后，客户端就会与服务器进行连接
+
+        // 收到的是 ArrayBuffer 数据
+        ws.binaryType = 'arraybuffer'
+
+        // 收到的是blob数据
+        ws.binaryType = "blob"
+
+        ws.onopen = function (evt) {
+            console.log("Connection open ...");
+            ws.send("Hello WebSockets!");
+        }
+
+        ws.onmessage = function (evt) {
+            if(evt.data instanceof Object) {
+                console.log("Received is blob")
+            }
+            if (evt.data instanceof ArrayBuffer) {
+                console.log("Received is arraybuffer")
+            }
+            console.log(evt.data) // Blob {size: 80, type: ""}
+            console.log("Received Message: " + evt.data)
+            console.log(typeof evt.data) // object
+            console.log(evt.data.byteLength) // undefined
+            console.log(evt.data.size) // 80
+            ws.close();
+        }
+
+        ws.onclose = function (evt) {
+            console.log("Connection closed.");
+        }
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

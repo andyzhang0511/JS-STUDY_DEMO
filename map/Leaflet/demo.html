@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./sourceFile/leaflet.css"/>
+    <script src="./sourceFile/leaflet.js"></script>
+    <body>
+        <div id="mapid" style="height: 1000px"></div>
+    </body>
+    <script>
+        // 初始化地图
+        var mymap = L.map('mapid').setView([23,113], 9);     // [23,113] 广州[纬度,经度]
+
+        /*
+        将图层加载到地图上
+        url是图层的资源的url
+        maxZoom 是最大的聚焦[mapbox官网最大的也是18了]
+        id 是 地图的样式并不是我们平常认识的id，本文选择了 street 的map
+        */
+        L.tileLayer('http://192.168.0.130/roadmap/{z}/{x}/{y}.png', { // eg  Request URL: http://192.168.0.130/roadmap/9/416/222.png
+        maxZoom: 18,
+        id: 'mapbox.streets',
+    }).addTo(mymap);
+
+        // 增加一个圆圈，设置圆心、半径、样式
+        var circle = L.circle([23,113], {
+            color: 'green',
+            fillColor: 'gray', // 填充颜色
+            fillOpacity: 0.5, // 透明度
+            radius: 10000 // 半径
+        }).addTo(mymap);
+
+        // 绘制三角形 bindPopup为图形添加弹出窗口
+        L.polygon([
+                [23,113.2],
+                [23,113.4],
+                [23.5,113.6]
+        ]).addTo(mymap).bindPopup("I am a polygon.");
+
+        //增加一个marker ，地图上的标记。bindPopup为图形添加弹出窗口，并绑定了一个popup，默认打开
+        L.marker([23,114]).addTo(mymap).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+        //为点击地图的事件 增加popup 这个事件是点击地图显示当前经纬度
+        var popup = L.popup();
+        function onMapClick(e) {
+            popup.setLatLng(e.latlng).setContent("You clicked the map at " + e.latlng.toString()).openOn(mymap);
+        }
+        mymap.on('click', onMapClick);
+    </script>
+</head>
+<style>
+</style>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="margin-top:20px;width:600px;height:200px;border:1px solid gray">
+        <h>时间utils</h>
+                <div>
+                <span>时间范围：</span><input type="text" id="startTime"/>~<input type="text" id="endTime"/>
+                </div>
+                <div style="padding-top: 10px;">
+                    <div >
+                        <input  type="radio" name="dateTime"  οnclick="setSearchDate(0)">
+                        <label >昨天</label>
+                    </div>
+                    <div >
+                        <input  type="radio" name="dateTime" οnclick="setSearchDate(1)">
+                        <label >今天</label>
+                    </div>
+                    <div >
+                        <input  type="radio" name="dateTime"  οnclick="setSearchDate(2)">
+                        <label >本周</label>
+                    </div>
+                    <div >
+                        <input  type="radio" name="dateTime" οnclick="setSearchDate(3)">
+                        <label >一周</label>
+                    </div>
+                    <div >
+                        <input  type="radio" name="dateTime" οnclick="setSearchDate(4)">
+                        <label >本月</label>
+                    </div>
+                    <div >
+                        <input  type="radio" name="dateTime"  οnclick="setSearchDate(5)">
+                        <label  >一月</label>
+                    </div>
+                </div>
+        </div>
+    <script>
+        //判断时间条件
+function timeFormat(){
+	var startTime = $('#startTime').val();
+	var endTime = $('#endTime').val();
+	if(startTime=='' || endTime==''){
+		jp.warning("时间不能为空");
+		return false; 
+	}
+	var date1 = new Date(startTime.replace(/-/g,"/"));
+	var date2 = new Date(endTime.replace(/-/g,"/"));
+	if(date2.getTime()<date1.getTime()){
+		jp.warning("开始时间不能大于结束时间！");
+		return false;
+	}
+	var day = parseInt(((date2.getTime()-date1.getTime())/1000)/(24*60*60));
+	if(day>30){
+		jp.warning("查询的时间区间不能超过30天");
+		return false;
+	}
+	return true;
+}
+ 
+/**获取指定范围内时间*/
+//设定查询时间
+function setSearchDate(range) {
+	var type="0";
+	switch (range) {
+		//0表示昨天
+		case 0:$('#startTime').val(addDate(-1)+" 00:00:00");$('#endTime').val(addDate(0)+" 00:00:00");break;
+		//1表示今天
+		case 1:$('#startTime').val(addDate(0)+" 00:00:00");$('#endTime').val(addDate(0,type));break;
+		//2表示本周内
+		case 2:;$('#startTime').val(addDate(-new Date().getDay()+1)+" 00:00:00");$('#endTime').val(addDate(0,type));break;
+		//3表示一周内
+		case 3:$('#startTime').val(addDate(-6,type));$('#endTime').val(addDate(0,type));break;
+		//4表示本月内
+		case 4:$('#startTime').val(addDate(-new Date().getDate()+1)+" 00:00:00");$('#endTime').val(addDate(0,type));break;
+		//5表示一月内
+		case 5:$('#startTime').val(addDate(-30,type));$('#endTime').val(addDate(0,type));break;
+		default:break;
+	}
+}
+ 
+//加减天数(含时分秒)
+function addDate(days,type) {
+	var d = new Date();
+	d.setDate(d.getDate()+days);
+	var month = d.getMonth()+1;
+	var day = d.getDate();
+	var hour = d.getHours();
+	var minutes = d.getMinutes();
+	var seconds = d.getSeconds();
+	
+	if(month<10) {
+		month="0"+month;
+	}
+	
+	if(day<10) {
+		day="0"+day;
+	}
+	var time="";
+	//type不是空字符串 表示需要时分秒
+	if(type!=null&&""!=type) {
+		if(hour<10) {
+			hour="0"+hour;
+		}
+		
+		if(minutes<10) {
+			minutes="0"+minutes;
+		}
+		
+		if(seconds<10) {
+			seconds="0"+seconds;
+		}
+		time = " "+hour+":"+minutes+":"+seconds;
+	}
+	var val = d.getFullYear()+"-"+month+"-"+day+time;
+	return val;
+}
+    </script>
+</body>
+</html>

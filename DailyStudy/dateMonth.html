@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        repayPlan = function (start, stop) {
+            //		拿到从页面传来的 开始和结束的日期
+            var date = [];
+            /*将日期 字符串分割*/
+            var start_ = start.split("-");
+            var stop_ = stop.split("-");
+            /*重新组合成一个新的字符串*/
+            var d1 = start_[0] + start_[1] + start_[2];
+            var d2 = stop_[0] + stop_[1] + stop_[2];
+            console.log(d1,d2) // 20190101 20200501 // string
+            /*转换成数字类型*/
+            var dd1 = parseInt(d1);
+            var dd2 = parseInt(d2);
+            console.log(dd1,dd2) // 20190101 20200501 number
+
+            /*设置一个index */
+            var index = dd1;
+            /*进行循环 往date数组中push新的元素*/
+            while (index < dd2) {
+                if (index % 10000 < 1200) {
+                    index += 100;
+                } else {
+                    index += 10000 - 1100;
+                }
+                /*将数字类型的index转换为字符串类型,并重新用"/"连接*/
+                index = index.toString().substring(0, 4) + "-" + index.toString().substring(4, 6) + "-" + index.toString().substring(6)
+                /*将处理好的日期数据放入date数组中*/
+                date.push(index.slice(0,7));
+                //			再次拆分日期数据并转化为数字格式，用来下一次的比较	
+                index = index.split("-")[0] + index.split("-")[1] + index.split("-")[2]
+                index = parseInt(index);
+            }
+            // 加上选的开始日期
+            date.unshift(start.slice(0,7))
+            //返回一个新的数组
+            return date;
+        }
+        var test = repayPlan('2019-01-01','2020-05-01')
+        console.log(test)
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

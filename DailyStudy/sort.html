@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var arr = ['tom', 'ani', 'love', 'sai', 'fei']
+        console.log(arr.sort())
+
+        var arr1 = [10, 20, 1, 2, 30, 3]
+        arr1.sort(function (x, y) {
+            if (x < y) {
+                return -1
+            }
+            return 0
+        })
+        console.log(arr1) // [1, 2, 3, 10, 20, 30]
+
+        var arr2 = [10, 20, 1, 2, 30, 3]
+        arr2.sort(function (x, y) {
+            if (x > y) {
+                return -1
+            }
+            return 0
+        })
+        console.log(arr2) // [30, 20, 10, 3, 2, 1]
+
+        var arr3 = ['Google', 'apple', 'Microsoft'];
+        arr3.sort(function (x, y) {
+            x1 = x.toUpperCase()
+            y1 = y.toUpperCase()
+            if (x1 < y1) {
+                return -1
+            } 
+            return 0
+        })
+        console.log(arr3) // ["apple", "Google", "Microsoft"]
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

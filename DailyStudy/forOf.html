@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>for...of</title>
+</head>
+
+<body>
+    <script>
+        // 1. 数组迭代
+        const products = ['oranges', 'apples']
+        // for...of 循环遍历 products 的每一项。迭代项被赋值给变量 product.
+        for (const product of products) {
+            console.log(product)
+        }
+        // oranges
+        // apples
+
+        const products1 = ['oranges', 'apples']
+        // 数组方法 entries() 可以用于访问迭代项的索引。该方法在每次迭代时返回一对 [index，item]
+        for (const product of products1.entries()) {
+            console.log(product)
+        }
+        // [0, "oranges"]
+        // [1, "apples"]
+
+        // 1.1 就地解构
+        // 遍历一个对象数组，提取每个对象的 name 属性：
+        // const { name } of persons 循环迭代 persons 对象数组，并且就地将 person 对象进行了解构
+        const persons = [
+            {
+                name: 'tom',
+                age: 12
+            },
+            {
+                name: 'jack',
+                age: 13
+            },
+            {
+                name: 'fan',
+                school: '111'
+            },
+            {
+                name: 'alex',
+                school: '222'
+            }
+        ]
+        for (const { name } of persons) {
+            console.log(name)
+        }
+        // tom
+        // jack
+        // fan
+        // alex
+
+        // 2. 类数组迭代
+        // for...of 可以用于迭代类数组对象。
+        // arguments 是函数体内的特殊变量，包含函数的所有参数，这是一个经典的类数组对象。
+        function sumTest() {
+            let sum = 0
+            for (const number of arguments) {
+                sum += number
+            }
+            return sum
+        }
+        const result = sumTest(1, 2, 3)
+        console.log(result) // 6
+
+        // 3.快速了解可迭代
+        const array = [1, 2, 3];
+        const iterator1 = array[Symbol.iterator]();
+        iterator1.next(); // => { value: 1, done: false }
+
+        // 4.字符串迭代
+        // javaScript的基础类型string是可迭代的
+        // 因此可以轻松的遍历字符串的字符
+        const message = 'hello'
+        for (const item of message) {
+            console.log(item)
+        }
+        // h
+        // e
+        // l
+        // l
+        // o
+
+        // 5.Map和Set迭代
+        const names = new Map();
+        names.set(1, 'one');
+        names.set(2, 'two');
+
+        for (const [number, name] of names) {
+            console.log(number, name);
+        }
+        // 在每个循环中，迭代器都会返回一个数组 [key，value] ，
+        // 并使用 const [number，name] 立即对这对数组进行解构。
+        //  1, 'one'
+        //  2, 'two'
+
+        // 以相同的方式可以遍历Set的项
+        const colors = new Set(['white','blue','red','white'])
+        for (let color of colors) {
+            console.log(color)
+        }
+        // 'white'
+        // 'blue'
+        // 'red'
+
+        // 6.迭代普通的jS对象
+        const person = {
+            name:'zhangfan',
+            job:'teacher'
+        }
+        console.log(Object.keys(person)) // ["name", "job"]
+        Object.keys(person).forEach(val => {
+            console.log(val,person[val]) 
+            // name zhangfan
+            // job teacher
+        })
+    </script>
+</body>
+
+</html>
